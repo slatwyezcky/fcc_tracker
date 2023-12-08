@@ -101,7 +101,7 @@ app.get('/api/users/:_id/logs', async function (req, res) {
   }));
   res.send({
     username: user.username,
-    count: logs.length,
+    count: exercises.length,
     _id,
     log: exercises,
   });
