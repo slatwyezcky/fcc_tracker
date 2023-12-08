@@ -59,14 +59,15 @@ app
   });
 
 app.post('/api/users/:_id/exercises', async function (req, res) {
-  let { ':_id': _id, description, duration, date } = req.body;
-  if (date === '') date = new Date().toDateString();
+  const { _id } = req.params;
+  const { description, duration, date } = req.body;
+
   const user = await User.findById(_id);
   const exercise = await Exercise.create({
-    username: user.username,
     duration: parseInt(duration),
     description,
-    date: new Date(date).toDateString(),
+    date:
+      date === '' ? new Date().toDateString() : new Date(date).toDateString(),
     userid: _id,
   });
   res.json({
