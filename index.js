@@ -83,17 +83,18 @@ app.get('/api/users/:_id/logs', async function (req, res) {
   const { _id } = req.params;
   const { from, to, limit } = req.query;
   const user = await User.findById(_id);
-  let logs = user.log;
+  let exercises = await Exercise.find({ userid: _id });
+
   if (from)
-    logs = logs.filter(
+    exercises = exercises.filter(
       (el) => new Date(from).getTime() <= new Date(el.date).getTime()
     );
   if (to)
-    logs = logs.filter(
+    exercises = exercises.filter(
       (el) => new Date(to).getTime() >= new Date(el.date).getTime()
     );
-  if (limit) logs = logs.slice(0, limit);
-  logs = logs.map((ex) => ({
+  if (limit) exercises = exercises.slice(0, limit);
+  exercises = exercises.map((ex) => ({
     description: ex.description,
     duration: ex.duration,
     date: ex.date,
@@ -102,7 +103,7 @@ app.get('/api/users/:_id/logs', async function (req, res) {
     username: user.username,
     count: logs.length,
     _id,
-    log: logs,
+    log: exercises,
   });
 });
 
