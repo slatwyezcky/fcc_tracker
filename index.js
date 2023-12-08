@@ -60,12 +60,12 @@ app.post('/api/users/:_id/exercises', async function (req, res) {
   let { ':_id': _id, description, duration, date } = req.body;
   if (date === '') date = new Date().toDateString();
   const user = await User.findById(_id);
-  user.log.push({ duration, description, date });
+  user.log.push({ duration: parseInt(duration), description, date });
   user.save();
   res.json({
     username: user.username,
     description,
-    duration,
+    duration: parseInt(duration),
     date,
     _id,
   });
