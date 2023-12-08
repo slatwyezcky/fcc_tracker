@@ -97,7 +97,7 @@ app.get('/api/users/:_id/logs', async function (req, res) {
   exercises = exercises.map((ex) => ({
     description: ex.description,
     duration: ex.duration,
-    date: ex.date,
+    date: new Date(ex.date).toDateString(),
   }));
   res.send({
     username: user.username,
