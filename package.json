@@ -15,7 +15,7 @@
     "mongoose": "^8.0.3"
   },
   "repository": {
-    "url": "https://github.com/freeCodeCamp/boilerplate-project-exercisetracker"
+    "url": "https://github.com/slatwyezcky/fcc_tracker"
   },
   "license": "MIT",
   "keywords": [

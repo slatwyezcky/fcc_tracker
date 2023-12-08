@@ -1,4 +1,5 @@
 const express = require('express');
+const app = express();
 const cors = require('cors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
@@ -11,21 +12,22 @@ dotenv.config();
 mongoose.connect(process.env.MONGO_URI);
 
 const exerciseSchema = new mongoose.Schema({
+  username: String,
   description: { type: String, required: true },
   duration: { type: Number, required: true },
   date: String,
+  userid: String,
 });
+
+const Exercise = mongoose.model('exercise', exerciseSchema);
 
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true },
-  log: [exerciseSchema],
 });
 
 const User = mongoose.model('User', userSchema);
 
-const app = express();
-
-app.use(cors());
+app.use(cors({ optionsSuccessStatus: 200 }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ extended: false }));
 app.use(express.static('public'));
@@ -60,17 +62,18 @@ app.post('/api/users/:_id/exercises', async function (req, res) {
   let { ':_id': _id, description, duration, date } = req.body;
   if (date === '') date = new Date().toDateString();
   const user = await User.findById(_id);
-  user.log.push({
-    duration: parseInt(duration),
-    description,
-    date: new Date(date).toDateString(),
-  });
-  await user.save();
-  res.send({
+  const exercise = await Exercise.create({
     username: user.username,
-    description,
     duration: parseInt(duration),
+    description,
     date: new Date(date).toDateString(),
+    userid: _id,
+  });
+  res.json({
+    username: user.username,
+    duration: exercise.duration,
+    description: exercise.description,
+    date: exercise.date,
     _id,
   });
 });
