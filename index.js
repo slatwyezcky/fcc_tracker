@@ -65,8 +65,8 @@ app.post('/api/users/:_id/exercises', async function (req, res) {
     description,
     date: new Date(date).toDateString(),
   });
-  user.save();
-  res.json({
+  await user.save();
+  res.send({
     username: user.username,
     description,
     duration: parseInt(duration),
@@ -94,7 +94,7 @@ app.get('/api/users/:_id/logs', async function (req, res) {
     duration: ex.duration,
     date: ex.date,
   }));
-  res.json({
+  res.send({
     username: user.username,
     count: logs.length,
     _id,
