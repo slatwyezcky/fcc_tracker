@@ -67,7 +67,11 @@ app.post('/api/users/:_id/exercises', async function (req, res) {
     duration: parseInt(duration),
     description,
     date:
-      date === '' ? new Date().toDateString() : new Date(date).toDateString(),
+      date === ''
+        ? new Date().toDateString()
+        : new Date(date).toDateString() === 'Invalid Date'
+        ? new Date().toDateString()
+        : new Date(date).toDateString(),
     userid: _id,
   });
   res.json({
@@ -97,7 +101,7 @@ app.get('/api/users/:_id/logs', async function (req, res) {
   exercises = exercises.map((ex) => ({
     description: ex.description,
     duration: ex.duration,
-    date: new Date(ex.date).toDateString(),
+    date: ex.date,
   }));
   res.send({
     username: user.username,
